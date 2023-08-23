@@ -4,3 +4,163 @@ URL = "https://realpython.github.io/fake-jobs/"
 page = requests.get(URL)
 
 soup = BeautifulSoup(page.content, "html.parser")
+---------------------------------------------------------------------------
+TimeoutError                              Traceback (most recent call last)
+File h:\p4nc_venv\lib\site-packages\urllib3\connection.py:203, in HTTPConnection._new_conn(self)
+    202 try:
+--> 203     sock = connection.create_connection(
+    204         (self._dns_host, self.port),
+    205         self.timeout,
+    206         source_address=self.source_address,
+    207         socket_options=self.socket_options,
+    208     )
+    209 except socket.gaierror as e:
+
+File h:\p4nc_venv\lib\site-packages\urllib3\util\connection.py:85, in create_connection(address, timeout, source_address, socket_options)
+     84 try:
+---> 85     raise err
+     86 finally:
+     87     # Break explicitly a reference cycle
+
+File h:\p4nc_venv\lib\site-packages\urllib3\util\connection.py:73, in create_connection(address, timeout, source_address, socket_options)
+     72     sock.bind(source_address)
+---> 73 sock.connect(sa)
+     74 # Break explicitly a reference cycle
+
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+
+The above exception was the direct cause of the following exception:
+
+NewConnectionError                        Traceback (most recent call last)
+File h:\p4nc_venv\lib\site-packages\urllib3\connectionpool.py:790, in HTTPConnectionPool.urlopen(self, method, url, body, headers, retries, redirect, assert_same_host, timeout, pool_timeout, release_conn, chunked, body_pos, preload_content, decode_content, **response_kw)
+    789 # Make the request on the HTTPConnection object
+--> 790 response = self._make_request(
+    791     conn,
+    792     method,
+    793     url,
+    794     timeout=timeout_obj,
+    795     body=body,
+    796     headers=headers,
+    797     chunked=chunked,
+    798     retries=retries,
+    799     response_conn=response_conn,
+    800     preload_content=preload_content,
+    801     decode_content=decode_content,
+    802     **response_kw,
+    803 )
+    805 # Everything went great!
+
+File h:\p4nc_venv\lib\site-packages\urllib3\connectionpool.py:491, in HTTPConnectionPool._make_request(self, conn, method, url, body, headers, retries, timeout, chunked, response_conn, preload_content, decode_content, enforce_content_length)
+    490         new_e = _wrap_proxy_error(new_e, conn.proxy.scheme)
+--> 491     raise new_e
+    493 # conn.request() calls http.client.*.request, not the method in
+    494 # urllib3.request. It also calls makefile (recv) on the socket.
+
+File h:\p4nc_venv\lib\site-packages\urllib3\connectionpool.py:467, in HTTPConnectionPool._make_request(self, conn, method, url, body, headers, retries, timeout, chunked, response_conn, preload_content, decode_content, enforce_content_length)
+    466 try:
+--> 467     self._validate_conn(conn)
+    468 except (SocketTimeout, BaseSSLError) as e:
+
+File h:\p4nc_venv\lib\site-packages\urllib3\connectionpool.py:1092, in HTTPSConnectionPool._validate_conn(self, conn)
+   1091 if conn.is_closed:
+-> 1092     conn.connect()
+   1094 if not conn.is_verified:
+
+File h:\p4nc_venv\lib\site-packages\urllib3\connection.py:611, in HTTPSConnection.connect(self)
+    610 sock: socket.socket | ssl.SSLSocket
+--> 611 self.sock = sock = self._new_conn()
+    612 server_hostname: str = self.host
+
+File h:\p4nc_venv\lib\site-packages\urllib3\connection.py:218, in HTTPConnection._new_conn(self)
+    217 except OSError as e:
+--> 218     raise NewConnectionError(
+    219         self, f"Failed to establish a new connection: {e}"
+    220     ) from e
+    222 # Audit hooks are only available in Python 3.8+
+
+NewConnectionError: <urllib3.connection.HTTPSConnection object at 0x0000025B7E2428E0>: Failed to establish a new connection: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+
+The above exception was the direct cause of the following exception:
+
+MaxRetryError                             Traceback (most recent call last)
+File h:\p4nc_venv\lib\site-packages\requests\adapters.py:486, in HTTPAdapter.send(self, request, stream, timeout, verify, cert, proxies)
+    485 try:
+--> 486     resp = conn.urlopen(
+    487         method=request.method,
+    488         url=url,
+    489         body=request.body,
+    490         headers=request.headers,
+    491         redirect=False,
+    492         assert_same_host=False,
+    493         preload_content=False,
+    494         decode_content=False,
+    495         retries=self.max_retries,
+    496         timeout=timeout,
+    497         chunked=chunked,
+    498     )
+    500 except (ProtocolError, OSError) as err:
+
+File h:\p4nc_venv\lib\site-packages\urllib3\connectionpool.py:844, in HTTPConnectionPool.urlopen(self, method, url, body, headers, retries, redirect, assert_same_host, timeout, pool_timeout, release_conn, chunked, body_pos, preload_content, decode_content, **response_kw)
+    842     new_e = ProtocolError("Connection aborted.", new_e)
+--> 844 retries = retries.increment(
+    845     method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    846 )
+    847 retries.sleep()
+
+File h:\p4nc_venv\lib\site-packages\urllib3\util\retry.py:515, in Retry.increment(self, method, url, response, error, _pool, _stacktrace)
+    514     reason = error or ResponseError(cause)
+--> 515     raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    517 log.debug("Incremented Retry for (url='%s'): %r", url, new_retry)
+
+MaxRetryError: HTTPSConnectionPool(host='realpython.github.io', port=443): Max retries exceeded with url: /fake-jobs/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000025B7E2428E0>: Failed to establish a new connection: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond'))
+
+During handling of the above exception, another exception occurred:
+
+ConnectionError                           Traceback (most recent call last)
+Cell In[2], line 2
+      1 URL = "https://realpython.github.io/fake-jobs/"
+----> 2 page = requests.get(URL)
+      4 soup = BeautifulSoup(page.content, "html.parser")
+
+File h:\p4nc_venv\lib\site-packages\requests\api.py:73, in get(url, params, **kwargs)
+     62 def get(url, params=None, **kwargs):
+     63     r"""Sends a GET request.
+     64 
+     65     :param url: URL for the new :class:`Request` object.
+   (...)
+     70     :rtype: requests.Response
+     71     """
+---> 73     return request("get", url, params=params, **kwargs)
+
+File h:\p4nc_venv\lib\site-packages\requests\api.py:59, in request(method, url, **kwargs)
+     55 # By using the 'with' statement we are sure the session is closed, thus we
+     56 # avoid leaving sockets open which can trigger a ResourceWarning in some
+     57 # cases, and look like a memory leak in others.
+     58 with sessions.Session() as session:
+---> 59     return session.request(method=method, url=url, **kwargs)
+
+File h:\p4nc_venv\lib\site-packages\requests\sessions.py:589, in Session.request(self, method, url, params, data, headers, cookies, files, auth, timeout, allow_redirects, proxies, hooks, stream, verify, cert, json)
+    584 send_kwargs = {
+    585     "timeout": timeout,
+    586     "allow_redirects": allow_redirects,
+    587 }
+    588 send_kwargs.update(settings)
+--> 589 resp = self.send(prep, **send_kwargs)
+    591 return resp
+
+File h:\p4nc_venv\lib\site-packages\requests\sessions.py:703, in Session.send(self, request, **kwargs)
+    700 start = preferred_clock()
+    702 # Send the request
+--> 703 r = adapter.send(request, **kwargs)
+    705 # Total elapsed time of the request (approximately)
+    706 elapsed = preferred_clock() - start
+
+File h:\p4nc_venv\lib\site-packages\requests\adapters.py:519, in HTTPAdapter.send(self, request, stream, timeout, verify, cert, proxies)
+    515     if isinstance(e.reason, _SSLError):
+    516         # This branch is for urllib3 v1.22 and later.
+    517         raise SSLError(e, request=request)
+--> 519     raise ConnectionError(e, request=request)
+    521 except ClosedPoolError as e:
+    522     raise ConnectionError(e, request=request)
+
+ConnectionError: HTTPSConnectionPool(host='realpython.github.io', port=443): Max retries exceeded with url: /fake-jobs/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000025B7E2428E0>: Failed to establish a new connection: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond'))
