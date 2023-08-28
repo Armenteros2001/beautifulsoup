@@ -5,6 +5,7 @@ page = requests.get(URL)
 
 soup = BeautifulSoup(page.content, "html.parser")
 ---------------------------------------------------------------------------
+---------------------------------------------------------------------------
 TimeoutError                              Traceback (most recent call last)
 File h:\p4nc_venv\lib\site-packages\urllib3\connection.py:203, in HTTPConnection._new_conn(self)
     202 try:
@@ -78,7 +79,7 @@ File h:\p4nc_venv\lib\site-packages\urllib3\connection.py:218, in HTTPConnection
     220     ) from e
     222 # Audit hooks are only available in Python 3.8+
 
-NewConnectionError: <urllib3.connection.HTTPSConnection object at 0x0000025B7E2428E0>: Failed to establish a new connection: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+NewConnectionError: <urllib3.connection.HTTPSConnection object at 0x000001BEAEDEDC10>: Failed to establish a new connection: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
 
 The above exception was the direct cause of the following exception:
 
@@ -112,15 +113,13 @@ File h:\p4nc_venv\lib\site-packages\urllib3\util\retry.py:515, in Retry.incremen
 --> 515     raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
     517 log.debug("Incremented Retry for (url='%s'): %r", url, new_retry)
 
-MaxRetryError: HTTPSConnectionPool(host='realpython.github.io', port=443): Max retries exceeded with url: /fake-jobs/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000025B7E2428E0>: Failed to establish a new connection: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond'))
+MaxRetryError: HTTPSConnectionPool(host='en.wikipedia.org', port=443): Max retries exceeded with url: /wiki/Main_Page (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001BEAEDEDC10>: Failed to establish a new connection: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond'))
 
 During handling of the above exception, another exception occurred:
 
 ConnectionError                           Traceback (most recent call last)
-Cell In[2], line 2
-      1 URL = "https://realpython.github.io/fake-jobs/"
-----> 2 page = requests.get(URL)
-      4 soup = BeautifulSoup(page.content, "html.parser")
+Cell In[3], line 1
+----> 1 page = requests.get(url)
 
 File h:\p4nc_venv\lib\site-packages\requests\api.py:73, in get(url, params, **kwargs)
      62 def get(url, params=None, **kwargs):
@@ -163,4 +162,4 @@ File h:\p4nc_venv\lib\site-packages\requests\adapters.py:519, in HTTPAdapter.sen
     521 except ClosedPoolError as e:
     522     raise ConnectionError(e, request=request)
 
-ConnectionError: HTTPSConnectionPool(host='realpython.github.io', port=443): Max retries exceeded with url: /fake-jobs/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000025B7E2428E0>: Failed to establish a new connection: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond'))
+ConnectionError: HTTPSConnectionPool(host='en.wikipedia.org', port=443): Max retries exceeded with url: /wiki/Main_Page (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001BEAEDEDC10>: Failed to establish a new connection: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond'))
