@@ -1,0 +1,10 @@
+import requests
+
+try:
+    response = requests.get('http://server_address')
+    if response.status_code == 200:
+        print('Server is up and running.')
+    else:
+        print('Server is up, but returned status code:', response.status_code)
+except requests.ConnectionError:
+    print('Server is down.')
