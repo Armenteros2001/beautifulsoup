@@ -1,0 +1,12 @@
+import os
+
+def check_proxy():
+    proxy_settings = ["HTTP_PROXY", "HTTPS_PROXY", "FTP_PROXY", "SOCKS_PROXY"]
+    for setting in proxy_settings:
+        proxy = os.environ.get(setting, None)
+        if proxy:
+            print(f"{setting} is set to {proxy}")
+        else:
+            print(f"{setting} is not set")
+
+check_proxy()
